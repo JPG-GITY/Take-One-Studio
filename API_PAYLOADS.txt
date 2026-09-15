@@ -1,0 +1,468 @@
+"""
+BYTEPLUS API PAYLOAD REFERENCE GUIDE
+Enterprise-Grade Mock API Response Structures
+"""
+
+# ============================================================================
+# 📋 1. SEED3D MESH GENERATION API
+# ============================================================================
+
+ENDPOINT: byteplus_api.generate_seed3d_mesh()
+
+INPUT PARAMETERS:
+────────────────
+prompt (str)        : Text description of 3D object
+quality (str)       : low | medium | high | ultra (default: high)
+
+EXAMPLE REQUEST:
+────────────────
+```python
+import asyncio
+from byteplus_mocks import byteplus_api
+
+response = asyncio.run(
+    byteplus_api.generate_seed3d_mesh(
+        prompt="A futuristic spaceship with glowing panels",
+        quality="high"
+    )
+)
+```
+
+RESPONSE STRUCTURE:
+───────────────────
+{
+    "status_code": 200,                    ← HTTP status code
+    "status": "completed",                 ← Job status (pending|processing|completed|failed)
+    "message": "3D mesh generation successful",
+    
+    "job_metadata": {                      ← Job tracking information
+        "job_id": "job_abc123xyz",         ← Unique job identifier
+        "request_id": "req_def456",        ← Request tracing ID
+        "service_name": "seed3d-mesh",     ← Which BytePlus service
+        "region": "apac-sg-1",             ← Edge node location
+        "timestamp": "2024-03-25T15:30:45Z", ← ISO timestamp
+        "estimated_duration_ms": 2847,     ← Estimated processing time
+        "api_version": "v2.0"              ← API version
+    },
+    
+    "data": {                              ← Generated asset data
+        "model_format": "glb",             ← Output format
+        "output_paths": {                  ← File locations
+            "glb": "/volcano/outputs/3d/job_abc123xyz/model_500k.glb",
+            "obj": "/volcano/outputs/3d/job_abc123xyz/model.obj",
+            "mtl": "/volcano/outputs/3d/job_abc123xyz/model.mtl"
+        },
+        "mesh_stats": {                    ← Mesh characteristics
+            "vertex_count": 523847,        ← Number of vertices
+            "triangle_count": 847392,      ← Number of polygons
+            "material_count": 12,          ← Number of materials
+            "bounding_box_size": "5 units" ← Physical dimensions
+        },
+        "parameters": {                    ← Original request parameters
+            "prompt": "A futuristic spaceship...",
+            "quality": "high",
+            "style": "photorealism"
+        }
+    },
+    
+    "metrics": {                           ← Performance data
+        "processing_time_ms": 2847,        ← Actual processing time
+        "queue_wait_ms": 324,              ← Time waiting in queue
+        "total_time_ms": 3171,             ← Total time from submission
+        "compute_cost_units": 75           ← Billing units consumed
+    },
+    
+    "edge_node": {                         ← Distributed system info
+        "node_id": "node_abc123",          ← Which compute node handled it
+        "region": "apac-sg-1",             ← Data center region
+        "throughput_utilization": "72%"    ← Node load percentage
+    }
+}
+
+KEY TALKING POINTS:
+───────────────────
+• Job tracking with job_id allows asynchronous monitoring
+• Edge node routing shows distributed system understanding
+• Cost units demonstrate billing infrastructure
+• Multiple output formats (GLB/OBJ/MTL) show format flexibility
+• Mesh statistics validate quality of generation
+
+
+# ============================================================================
+# 🎨 2. SEEDREAM TEXTURE GENERATION API
+# ============================================================================
+
+ENDPOINT: byteplus_api.generate_seedream_texture()
+
+INPUT PARAMETERS:
+────────────────
+prompt (str)              : Text description of texture
+reference_image (str)     : Optional reference image path
+material_type (str)       : pbr | specular | metallic (default: pbr)
+
+EXAMPLE REQUEST:
+────────────────
+```python
+response = asyncio.run(
+    byteplus_api.generate_seedream_texture(
+        prompt="Rough industrial metal with rust streaks",
+        material_type="pbr"
+    )
+)
+```
+
+RESPONSE STRUCTURE:
+───────────────────
+{
+    "status_code": 200,
+    "status": "completed",
+    "message": "Texture generation successful",
+    
+    "job_metadata": {                      ← Same structure as Seed3D
+        "job_id": "job_xyz789",
+        "request_id": "req_uvw012",
+        "service_name": "seedream-texture",
+        "region": "us-west-2",
+        "timestamp": "2024-03-25T15:35:12Z",
+        "estimated_duration_ms": 2500,
+        "api_version": "v2.0"
+    },
+    
+    "data": {                              ← Generated texture data
+        "texture_resolution": "4K (4096x4096)",     ← Resolution
+        
+        "pbr_maps": {                      ← Physically-based texture maps
+            "albedo": "/volcano/outputs/textures/job_xyz789/texture_albedo_4k.exr",
+            "normal": "/volcano/outputs/textures/job_xyz789/texture_normal_4k.exr",
+            "roughness": "/volcano/outputs/textures/job_xyz789/texture_roughness_4k.exr",
+            "metallic": "/volcano/outputs/textures/job_xyz789/texture_metallic_4k.exr",
+            "ambient_occlusion": "/volcano/outputs/textures/job_xyz789/texture_ao_4k.exr",
+            "displacement": "/volcano/outputs/textures/job_xyz789/texture_displacement_4k.exr",
+            "emissive": "/volcano/outputs/textures/job_xyz789/texture_emissive_4k.exr"
+        },
+        
+        "texture_metadata": {               ← Technical specifications
+            "format": "EXR",               ← OpenEXR format (VFX standard)
+            "color_space": "Linear",       ← Linear RGB for correct blending
+            "compression": "ZIP",          ← Lossless compression
+            "total_size_mb": 548           ← Total file size
+        },
+        
+        "material_properties": {            ← Generated material values
+            "roughness_range": [0.18, 0.72], ← Min/max roughness
+            "metallic_range": [0.0, 0.85],   ← Min/max metallic
+            "normal_strength": 1.2,          ← Normal map intensity
+            "displacement_height": 0.8       ← Displacement scale
+        },
+        
+        "parameters": {                    ← Original request
+            "prompt": "Rough industrial metal...",
+            "material_type": "pbr",
+            "reference_image": "none"
+        }
+    },
+    
+    "metrics": {                           ← Performance data
+        "processing_time_ms": 2156,
+        "generation_passes": 4,            ← Number of refinement cycles
+        "refinement_iterations": 2,        ← AI model iterations
+        "total_time_ms": 2564,
+        "compute_cost_units": 125
+    },
+    
+    "edge_node": {                         ← GPU compute details
+        "node_id": "node_gpu_04",
+        "region": "us-west-2",
+        "gpu_utilization": "87%",          ← GPU load
+        "memory_used_gb": "12GB"           ← VRAM consumption
+    }
+}
+
+PBR WORKFLOW EXPLANATION:
+─────────────────────────
+PBR (Physically-Based Rendering) uses 7 texture maps:
+
+1. ALBEDO (Base Color)
+   • RGB colors without lighting
+   • Pure surface color information
+   • No shadows or reflections
+
+2. NORMAL
+   • Encodes surface detail
+   • Blue channel stores height
+   • Fakes geometric detail without polygons
+
+3. ROUGHNESS
+   • Grayscale: black=shiny, white=rough
+   • Controls specular reflection spread
+
+4. METALLIC
+   • Grayscale: black=non-metal, white=pure metal
+   • Affects reflection behavior
+
+5. AMBIENT OCCLUSION (AO)
+   • Grayscale: shadows in crevices
+   • Darkens areas with less light access
+
+6. DISPLACEMENT
+   • Grayscale: vertices move based on values
+   • Creates actual geometric detail
+   • More expensive than normal mapping
+
+7. EMISSIVE
+   • RGB color that self-illuminates
+   • For glowing materials
+
+STUDIO-GRADE FORMAT:
+───────────────────
+• EXR format: Industry standard for VFX (preserves color precision)
+• 4K resolution: Suitable for hero assets
+• Linear color space: Required for physically-plausible rendering
+• ZIP compression: Lossless compression maintains quality
+
+
+# ============================================================================
+# 🎥 3. SEEDANCE PREVIZ VIDEO GENERATION API
+# ============================================================================
+
+ENDPOINT: byteplus_api.generate_seedance_previz()
+
+INPUT PARAMETERS:
+─────────────────
+prompt (str)              : Motion/animation description
+reference_image (str)     : Optional reference input
+duration_seconds (float)  : Video length (default: 3.0)
+fps (int)                 : Frame rate (24, 30, 60; default: 30)
+
+EXAMPLE REQUEST:
+────────────────
+```python
+response = asyncio.run(
+    byteplus_api.generate_seedance_previz(
+        prompt="A robot walking and waving its arm",
+        duration_seconds=3.0,
+        fps=30
+    )
+)
+```
+
+RESPONSE STRUCTURE:
+───────────────────
+{
+    "status_code": 200,
+    "status": "completed",
+    "message": "Pre-viz video generation successful",
+    
+    "job_metadata": {                      ← Standard job tracking
+        "job_id": "job_vid123",
+        "request_id": "req_mno345",
+        "service_name": "seedance-previz",
+        "region": "eu-central-1",
+        "timestamp": "2024-03-25T15:40:20Z",
+        "estimated_duration_ms": 3200,
+        "api_version": "v2.0"
+    },
+    
+    "data": {                              ← Video output data
+        "video_output": {                  ← Main video file
+            "path": "/volcano/outputs/video/job_vid123/previz_hq.mp4",
+            "format": "H.265 HEVC",        ← Modern codec (better compression)
+            "codec": "h265",
+            "resolution": "1920x1080",     ← HD resolution
+            "fps": 30,                     ← Frame rate
+            "duration_seconds": 3.0,
+            "total_frames": 90,            ← 3sec × 30fps
+            "file_size_mb": 157.3          ← File size
+        },
+        
+        "proxy_outputs": {                 ← Lower-res for preview
+            "low_res": "/volcano/outputs/video/job_vid123/previz_proxy_sd.mp4",
+            "preview": "/volcano/outputs/video/job_vid123/previz_preview.webm"
+        },
+        
+        "frame_sequence": {                ← Individual frames (for compositing)
+            "path": "/volcano/outputs/video/job_vid123/frames/frame_0001.exr",
+            "format": "EXR (32-bit float)",
+            "total_frames": 90,
+            "color_space": "ACES",         ← Academy Color Encoding Standard
+            "metadata": "OpenEXR with motion vectors and object IDs"
+        },
+        
+        "motion_data": {                   ← Advanced animation data
+            "motion_vectors": "/volcano/outputs/video/job_vid123/motion_vectors.bin",
+            "camera_tracking": "/volcano/outputs/video/job_vid123/camera_track.json",
+            "skeletal_animation": "/volcano/outputs/video/job_vid123/skeleton.fbx"
+        },
+        
+        "parameters": {                    ← Original request
+            "prompt": "A robot walking...",
+            "reference_image": "none",
+            "animation_model": "diffusion-v3"
+        }
+    },
+    
+    "metrics": {                           ← Generation performance
+        "processing_time_ms": 2897,        ← Time to generate all frames
+        "frames_generated": 90,            ← Total frames created
+        "frames_per_second_actual": 31.1,  ← Actual generation speed
+        "total_time_ms": 3284,
+        "compute_cost_units": 287          ← Higher cost due to complexity
+    },
+    
+    "edge_node": {                         ← Compute resource info
+        "node_id": "node_gpu_cluster_07",
+        "region": "eu-central-1",
+        "gpu_count": 4,                    ← Multiple GPUs for rendering
+        "gpu_memory_used_gb": "48GB",      ← Total VRAM usage
+        "distributed_rendering": true      ← Split across nodes
+    },
+    
+    "quality_metrics": {                   ← AI-generated quality scores
+        "optical_flow_confidence": 0.894,  ← Motion tracking quality (0-1)
+        "temporal_consistency": 0.913,     ← Smoothness across frames (0-1)
+        "artifact_score": 0.042            ← Visual defects (0-1, lower is better)
+    }
+}
+
+OUTPUT FORMATS EXPLAINED:
+────────────────────────
+
+1. MAIN VIDEO (previz_hq.mp4)
+   • H.265 HEVC codec: 40-50% better compression than H.264
+   • 1920x1080: HD resolution suitable for review
+   • Use: Review, approval, editorial reference
+
+2. PROXY VIDEO (previz_proxy_sd.mp4)
+   • Lower resolution for faster playback
+   • Use: Fast iteration, dailies
+
+3. PREVIEW (preview.webm)
+   • Web-friendly format
+   • Use: Remote collaboration, web delivery
+
+4. FRAME SEQUENCE (EXR frames)
+   • Uncompressed individual frames
+   • ACES color space: Industry standard for VFX
+   • Use: Final compositing, color grading
+   • File per frame: frame_0001.exr, frame_0002.exr, etc.
+
+5. MOTION VECTORS (motion_vectors.bin)
+   • Optical flow data between frames
+   • Use: Relight, re-time, or stabilize shots
+
+6. CAMERA TRACKING (camera_track.json)
+   • 3D camera position and orientation per frame
+   • Use: Environment replacement, compositing
+
+7. SKELETAL ANIMATION (skeleton.fbx)
+   • 3D character rig and animation
+   • Use: Import to Maya/Blender for re-animation
+
+QUALITY SCORES:
+───────────────
+
+Optical Flow Confidence (0.0 - 1.0):
+  0.7-0.8: Acceptable, some motion artifacts
+  0.8-0.9: Good, most motion tracked well
+  0.9-1.0: Excellent, smooth consistent motion
+  
+Temporal Consistency (0.0 - 1.0):
+  0.7-0.8: Acceptable, minor flicker
+  0.8-0.9: Good, mostly smooth
+  0.9-1.0: Excellent, perfectly smooth
+  
+Artifact Score (0.0 - 1.0):
+  0.0-0.05: Excellent, no visible artifacts
+  0.05-0.10: Good, minimal artifacts
+  0.10-0.20: Acceptable, some visible issues
+  > 0.20: Poor, consider regeneration
+
+
+# ============================================================================
+# 🏗️ ENTERPRISE ARCHITECTURE CONCEPTS
+# ============================================================================
+
+These API structures demonstrate:
+
+1. DISTRIBUTED SYSTEMS
+   • job_id/request_id for tracking across services
+   • Edge node routing for geographical optimization
+   • Metrics for load balancing decisions
+
+2. ASYNCHRONOUS PROCESSING
+   • Status codes (pending/processing/completed)
+   • Estimated duration for user feedback
+   • Job metadata for future polling
+
+3. COST TRACKING
+   • compute_cost_units for billing
+   • Resource utilization metrics
+   • Enables chargeback models
+
+4. VFX INDUSTRY STANDARDS
+   • OpenEXR for high-quality image data
+   • ACES color space for color accuracy
+   • Multiple output formats for workflow flexibility
+   • Frame sequences for compositing
+
+5. QUALITY ASSURANCE
+   • Metrics for monitoring system performance
+   • Quality scores for output validation
+   • Artifact detection for failure cases
+
+6. OBSERVABILITY
+   • Job tracking through timestamps
+   • Resource monitoring (GPU utilization, memory)
+   • Detailed metrics for SLA monitoring
+
+
+# ============================================================================
+# 💡 INTERVIEW DISCUSSION POINTS
+# ============================================================================
+
+"These API structures demonstrate understanding of production VFX pipelines.
+For example, frame sequences in EXR format with ACES color space show
+knowledge of how studios actually work. The motion vectors and skeletal
+animation data show how AI outputs integrate with existing DCC tools."
+
+"The job tracking system (job_id, region routing) reflects how BytePlus
+would handle distributed processing across data centers. The metrics
+enable proper billing, SLA monitoring, and capacity planning."
+
+"The multiple output formats show that we're not just generating files—
+we're providing a complete ecosystem. Proxy formats for fast review,
+frame sequences for compositing, skeletal data for re-animation."
+
+"Quality metrics like optical_flow_confidence and temporal_consistency
+are critical for any generative system. You need to know when outputs
+are good vs. when they need regeneration."
+
+
+# ============================================================================
+# 🔗 INTEGRATION WITH RAG SYSTEM
+# ============================================================================
+
+The APIs work together in this flow:
+
+1. User asks: "I need a rusty metal shader"
+
+2. RAG Engine:
+   • Queries Pinecone for "Rusty Sci-Fi Metal Shader" (similarity: 0.89)
+   • Generates Maya code using that as reference
+   • User can now recreate or import that asset
+
+3. User likes the texture, wants generation:
+   • Open Tab 2 (Pre-Production)
+   • Enter prompt: "Rusty metal, more intense weathering"
+   • Calls generate_seedream_texture()
+   • Gets back 4K EXR maps ready to apply
+
+4. Director wants to see motion:
+   • Open Tab 3 (SeeDance)
+   • Enter: "Show a robot moving like in that texture asset"
+   • Calls generate_seedance_previz()
+   • Gets back HQ video + frame sequence
+   • Frame quality scores decide if it's ready for storyboarding
+
+This demonstrates the complete pipeline from retrieval → generation → 
+preview → integration.

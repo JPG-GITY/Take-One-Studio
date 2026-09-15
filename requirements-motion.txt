@@ -1,0 +1,22 @@
+# Optional: pose extraction for motion drive videos (motion_drive.py,
+# POST /api/motion/skeleton). Deliberately NOT in requirements.txt — these three pull
+# ~200 MB and matter only to someone driving a character with real footage, so a normal
+# install stays small and the endpoint answers 503 with this filename until they are here.
+#
+#   .venv-mac/bin/pip install -r requirements-motion.txt
+#
+# Also needs `ffmpeg` on PATH (already present on this machine via Homebrew) — OpenCV
+# writes mp4v, which no browser plays, and the overlay exists to BE watched.
+# rtmlib downloads ~100 MB of RTMPose ONNX weights on first run and caches them.
+#
+# No torch: rtmlib runs with backend="onnxruntime", so nothing here needs it. That is the
+# whole reason this is a 200 MB optional extra and not a 2 GB one.
+#
+# Unpinned on purpose. They were NOT installed when this was written — PyPI is unreachable
+# from the sandbox the code was authored in — so pinning would be quoting versions nobody
+# verified. onnxruntime is floored because 1.19 is the first release that works with the
+# numpy 2.x this venv already has (2.4.6).
+
+rtmlib
+onnxruntime>=1.19
+opencv-python

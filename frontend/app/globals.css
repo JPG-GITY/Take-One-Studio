@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* Dark is the default theme: @theme emits these to :root and utilities reference
+   them via var(), so [data-theme="light"] below can override them at runtime and
+   recolour the whole app. */
+@theme {
+  /* Neutral-cool dark: grays (slight blue hint) instead of navy, and much
+     brighter secondary text — the navy + dim blue text read low-contrast. */
+  --color-bg:             #0C0E12;
+  --color-surface:        #15181E;
+  --color-elevated:       #1D212A;
+  --color-border:         #2B313C;
+  --color-cyan:           #00D4FF;
+  --color-cyan-dim:       #00D4FF1A;
+  --color-cyan-glow:      #00D4FF44;
+  --color-orange:         #FF6B1A;
+  --color-orange-dim:     #FF6B1A1A;
+  --color-orange-glow:    #FF6B1A44;
+  --color-green:          #00E5A0;
+  --color-green-dim:      #00E5A01A;
+  --color-red:            #FF3B5C;
+  --color-red-dim:        #FF3B5C1A;
+  --color-text-primary:   #EAEDF1;
+  --color-text-muted:     #8B95A4;
+  --color-text-dim:       #5C6573;
+
+  --shadow-neon-cyan:   0 0 8px var(--color-cyan-glow), 0 0 20px #00D4FF18;
+  --shadow-neon-orange: 0 0 8px var(--color-orange-glow), 0 0 20px #FF6B1A18;
+  --shadow-neon-green:  0 0 8px var(--color-green-dim), 0 0 20px #00E5A018;
+  --shadow-neon-red:    0 0 8px var(--color-red-dim);
+
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+:root { color-scheme: dark; }
+
+/* ── Light theme — overrides the palette; utilities recolour via var() ───────── */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --color-bg:             #EAEFF6;
+  --color-surface:        #FFFFFF;
+  --color-elevated:       #EEF3F9;
+  --color-border:         #D2DCEC;
+  --color-cyan:           #0091BE;
+  --color-cyan-dim:       #0091BE14;
+  --color-cyan-glow:      #0091BE2E;
+  --color-orange:         #D9590F;
+  --color-orange-dim:     #D9590F14;
+  --color-orange-glow:    #D9590F2E;
+  --color-green:          #00926B;
+  --color-green-dim:      #00926B14;
+  --color-red:            #D71F45;
+  --color-red-dim:        #D71F4514;
+  --color-text-primary:   #0E1A2B;
+  --color-text-muted:     #56677E;
+  --color-text-dim:       #93A2B7;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #__next {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-dim); }
+
+/* Range inputs */
+input[type='range'] { -webkit-appearance: none; background: transparent; cursor: pointer; }
+input[type='range']::-webkit-slider-runnable-track {
+  height: 3px; background: var(--color-border); border-radius: 2px;
+}
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px; height: 12px;
+  background: var(--color-cyan); border-radius: 50%; margin-top: -4.5px;
+  box-shadow: 0 0 6px var(--color-cyan);
+}

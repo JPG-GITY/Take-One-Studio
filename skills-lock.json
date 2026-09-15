@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "skills": {
+    "sd25-pe": {
+      "source": "arkdocs-en.tos-ap-southeast-1.volces.com",
+      "sourceUrl": "https://arkdocs-en.tos-ap-southeast-1.volces.com/skills/",
+      "sourceType": "well-known",
+      "computedHash": "4abb900048d77cb5aecf8d2278e8385249b62157337839a3718dd95ddf05910f",
+      "wellKnownDigest": "sha256:7c0bf0aa0eae294e516d7600c6839eb72d07aa7639875d229e9508ba9382f82b"
+    }
+  }
+}

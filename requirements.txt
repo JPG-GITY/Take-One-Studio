@@ -1,0 +1,21 @@
+# Take One Studio backend (FastAPI) — real dependency set.
+# The old file listed the retired Streamlit/Pinecone/RAG stack (torch included)
+# and omitted half of what the server actually imports; install from THIS.
+fastapi>=0.110
+uvicorn[standard]>=0.29
+sse-starlette>=2.0
+pydantic>=2.5
+python-dotenv>=1.0
+requests>=2.31
+httpx>=0.24
+openai>=1.18
+anthropic>=0.25
+websockets>=12.0
+certifi>=2024.2.2
+# Pillow is imported INSIDE functions (vision downscale, Claude image blocks, character-sheet
+# composite, dHash, border trim, headshot), so a venv without it still starts. Worse, the
+# vision downscale and the Claude image block both catch the ImportError and degrade quietly
+# — no downscale under the 10 MB cap, the reference image silently dropped. It was missing
+# from this list until 2026-09-14 and only worked on the Mac that already had it installed;
+# the floor is the version that Mac runs (12.2.0), not a researched minimum.
+pillow>=12.2
